@@ -24,4 +24,6 @@ public class Pet {
     @JoinColumn(name = "breed_id", nullable = false)
     private Breed breed;
 
+    @Enumerated(EnumType.STRING)
+    private PetStatus status;
 }

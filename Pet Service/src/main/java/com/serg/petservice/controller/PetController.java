@@ -1,6 +1,8 @@
 package com.serg.petservice.controller;
 
+import com.serg.petservice.exception.NotFoundException;
 import com.serg.petservice.model.Pet;
+import com.serg.petservice.model.PetStatus;
 import com.serg.petservice.service.PetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -45,5 +47,19 @@ public class PetController {
     public ResponseEntity<Void> deletePet(@PathVariable("id") Long id) {
         petService.deletePet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{petId}/status")
+    public ResponseEntity<String> updatePetStatus(
+            @PathVariable Long petId,
+            @RequestParam PetStatus status) {
+        try {
+            petService.updatePetStatus(petId, status);
+            return ResponseEntity.ok("Pet status updated successfully.");
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
